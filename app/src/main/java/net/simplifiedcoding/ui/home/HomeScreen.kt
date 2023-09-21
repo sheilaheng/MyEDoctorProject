@@ -16,8 +16,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import net.simplifiedcoding.R
+import net.simplifiedcoding.navigation.ROUTE_APPOINTMENTS
 import net.simplifiedcoding.navigation.ROUTE_HOME
 import net.simplifiedcoding.navigation.ROUTE_LOGIN
+
 import net.simplifiedcoding.ui.auth.AuthViewModel
 import net.simplifiedcoding.ui.theme.AppTheme
 import net.simplifiedcoding.ui.theme.spacing
@@ -96,6 +98,44 @@ fun HomeScreen(viewModel: AuthViewModel?, navController: NavHostController) {
                     modifier = Modifier.weight(0.7f),
                     color = MaterialTheme.colorScheme.onSurface
                 )
+            }
+
+            Button(
+                onClick = {
+                    viewModel?.logout()
+                    navController.navigate(ROUTE_APPOINTMENTS) {
+                        popUpTo(ROUTE_HOME) {
+                            inclusive = true
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = spacing.extraSmall)
+
+
+            ) {
+                Text(text = "Medical history")
+
+            }
+
+            Button(
+                onClick = {
+                    viewModel?.logout()
+                    navController.navigate(ROUTE_APPOINTMENTS) {
+                        popUpTo(ROUTE_HOME) {
+                            inclusive = true
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = spacing.extraSmall)
+
+
+            ) {
+                Text(text = "Make Appointments")
+
             }
 
             Button(

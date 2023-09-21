@@ -28,8 +28,8 @@ fun AuthHeader() {
         Image(
             modifier = Modifier
                 .size(128.dp, 128.dp),
-            painter = painterResource(id = R.drawable.ic_app_logo),
-            contentDescription = stringResource(id = R.string.app_name)
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = stringResource(id = R.string.MyEDoctor)
         )
 
         Text(
@@ -37,7 +37,7 @@ fun AuthHeader() {
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .padding(top = spacing.medium),
-            text = stringResource(id = R.string.app_name),
+            text = stringResource(id = R.string.MyEDoctor),
             style = MaterialTheme.typography.headlineMedium,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurface

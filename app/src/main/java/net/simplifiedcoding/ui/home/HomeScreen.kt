@@ -2,6 +2,7 @@ package net.simplifiedcoding.ui.home
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -9,6 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,6 +22,7 @@ import net.simplifiedcoding.R
 import net.simplifiedcoding.navigation.ROUTE_APPOINTMENTS
 import net.simplifiedcoding.navigation.ROUTE_HOME
 import net.simplifiedcoding.navigation.ROUTE_LOGIN
+import net.simplifiedcoding.navigation.ROUTE_MEDICALHISTORY
 
 import net.simplifiedcoding.ui.auth.AuthViewModel
 import net.simplifiedcoding.ui.theme.AppTheme
@@ -29,6 +33,7 @@ fun HomeScreen(viewModel: AuthViewModel?, navController: NavHostController) {
     val spacing = MaterialTheme.spacing
     Column(
         modifier = Modifier
+            .background(Color.DarkGray)
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(spacing.medium)
@@ -100,24 +105,23 @@ fun HomeScreen(viewModel: AuthViewModel?, navController: NavHostController) {
                 )
             }
 
-            Button(
-                onClick = {
-                    viewModel?.logout()
-                    navController.navigate(ROUTE_APPOINTMENTS) {
-                        popUpTo(ROUTE_HOME) {
-                            inclusive = true
-                        }
-                    }
-                },
+            var medicalhistory = LocalContext.current
+            Button(onClick = {
+
+                navController.navigate(ROUTE_MEDICALHISTORY)
+            },
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = spacing.extraSmall)
+                    .fillMaxWidth()
+                    .padding(20.dp)
 
 
             ) {
-                Text(text = "Medical history")
+                Text(text = "MedicalHistory" )
 
             }
+
+
+        }
 
             Button(
                 onClick = {
@@ -153,7 +157,7 @@ fun HomeScreen(viewModel: AuthViewModel?, navController: NavHostController) {
             }
         }
     }
-}
+
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable

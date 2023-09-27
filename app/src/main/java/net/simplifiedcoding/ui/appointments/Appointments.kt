@@ -73,22 +73,19 @@ fun AppointmentsScreen(viewModel: AuthViewModel?, navController: NavController){
             }) {
             // on below line we are calling
             // method to display UI
-            firebaseUI(LocalContext.current)
+            FirebaseUI(LocalContext.current, navController)
         }
     }
 
 
-
 }
 
 
-fun popUpTo(routeAppointments: String, function: () -> Unit) {
 
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun firebaseUI(context: Context) {
+fun FirebaseUI(context: Context, navController: NavController) {
 
     // on below line creating variable for course name,
     // course duration and course description.
@@ -248,9 +245,9 @@ fun firebaseUI(context: Context) {
         //use text view as a button
 
 
-        var medicalhistory = LocalContext.current
+
         Button(onClick = {
-            val navController = null
+
             navController.navigate(ROUTE_MEDICALHISTORY)
         },
             modifier = Modifier
@@ -265,38 +262,12 @@ fun firebaseUI(context: Context) {
 
 
 
-//
-//        var spacing = null
-//        Button(
-//            onClick = {
-//                var viewModel = null
-//                viewModel?.logout()
-//                var navController = null
-//                navController.navigate(ROUTE_MEDICALHISTORY) {
-//                    popUpTo(ROUTE_APPOINTMENTS) { var inclusive = true }
-//                }
-//            },
-//            modifier = Modifier
-//                .align(Alignment.CenterHorizontally)
-//
-//        ) {
-//            Text(text = stringResource(id = R.string.medicalhistory))
-//        }
 
-        Spacer(modifier = Modifier.height(5.dp))
-        //another button
-   
         
     }
 }
 
-private fun Nothing?.logout() {
-    TODO("Not yet implemented")
-}
 
-private fun Nothing?.navigate(routeMedicalhistory: String) {
-
-}
 
 fun addDataToFirebase(
 

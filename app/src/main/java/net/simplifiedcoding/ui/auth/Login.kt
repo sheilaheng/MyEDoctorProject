@@ -120,23 +120,6 @@ fun LoginScreen(viewModel: AuthViewModel?, navController: NavController) {
         }
 
 
-        Text(
-            modifier = Modifier
-                .constrainAs(refTextSignup) {
-                    top.linkTo(refButtonLogin.bottom, spacing.medium)
-                    start.linkTo(parent.start, spacing.extraLarge)
-                    end.linkTo(parent.end, spacing.extraLarge)
-                }
-                .clickable {
-                    navController.navigate(ROUTE_SIGNUP) {
-                        popUpTo(ROUTE_LOGIN) { inclusive = true }
-                    }
-                },
-            text = stringResource(id = R.string.dont_have_account),
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurface
-        )
 
         loginFlow?.value?.let {
             when (it) {

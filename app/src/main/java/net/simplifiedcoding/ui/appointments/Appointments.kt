@@ -1,18 +1,26 @@
 package net.simplifiedcoding.ui.appointments
 
+
+
+import net.simplifiedcoding.ui.auth.AuthViewModel
+
+
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.text.TextUtils
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -20,95 +28,126 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import net.simplifiedcoding.Patient
+import net.simplifiedcoding.R
+import net.simplifiedcoding.navigation.ROUTE_APPOINTMENTS
+import net.simplifiedcoding.navigation.ROUTE_HOME
+import net.simplifiedcoding.navigation.ROUTE_LOGIN
+import net.simplifiedcoding.navigation.ROUTE_MEDICALHISTORY
+import net.simplifiedcoding.navigation.ROUTE_SIGNUP
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import net.simplifiedcoding.PatientObj
-import net.simplifiedcoding.ui.auth.AuthViewModel
+import kotlinx.coroutines.NonDisposableHandle.parent
+
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppointmentsScreen(viewModel: AuthViewModel?, navController: NavHostController) {
+fun AppointmentsScreen(viewModel: AuthViewModel?, navController: NavController){
 
-    var firebaseDatabase = FirebaseDatabase.getInstance().getReference("Data")
-        .child("Name");
+    Surface(
+        // on below line we are specifying modifier and color for our app
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        // on the below line we are specifying the theme as the scaffold.
+        Scaffold(
+            // in scaffold we are specifying the top bar.
+            topBar = {
+                // inside top bar we are specifying background color.
+                SmallTopAppBar(
+                    // along with that we are specifying
+                    // title for our top bar.
+                    title = {
+                        // in the top bar we are
+                        // specifying tile as a text
+                        Text(
 
-    // on below line we are calling method to display UI
-    firebaseUI(LocalContext.current, firebaseDatabase )
+                            // on below line we are specifying
+                            // text to display in top app bar
+                            text = "ADD YOUR SYMPTOMS",
+                            // on below line we are specifying
+                            // modifier to fill max width
+                            modifier = Modifier.fillMaxWidth(),
+                            // on below line we are
+                            // specifying text alignment
+                            textAlign = TextAlign.Center,
+                            // on below line we are specifying
+                            // color for our text.
+                            color = Color.White
+                        )
+                    })
+            }) {
+            // on below line we are calling
+            // method to display UI
+            firebaseUI(LocalContext.current)
+        }
+    }
 
 
 
 }
 
 
+fun popUpTo(routeAppointments: String, function: () -> Unit) {
 
-
-
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun firebaseUI(context: Context, databaseReference: DatabaseReference) {
+fun firebaseUI(context: Context) {
 
-    val name = remember {
-        mutableStateOf(TextFieldValue())
+    // on below line creating variable for course name,
+    // course duration and course description.
+    val patientName = remember {
+        mutableStateOf("")
     }
 
-    val illness = remember {
-        mutableStateOf(TextFieldValue())
+    val patientIllness = remember {
+        mutableStateOf("")
     }
 
-    val conditiondetails = remember {
-        mutableStateOf(TextFieldValue())
+    val patientCondition = remember {
+        mutableStateOf("")
     }
 
-    // on below line creating a column to display our retrieved list.
 
+    // on below line creating a column
+    // to display our retrieved image view.
     Column(
         // adding modifier for our column
         modifier = Modifier
             .fillMaxHeight()
             .fillMaxWidth()
             .background(Color.White),
-        // on below line adding vertical and horizontal alignment for column.
-        verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally
+        // on below line adding vertical and
+        // horizontal alignment for column.
+        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(
-            text = "Make Your Appointments Today",
-            // in modifier we are specifying padding
-            // for our text from all sides.
-            modifier = Modifier.padding(10.dp),
-            // on below line we are specifying
-            // style for our text
-            style = TextStyle(
-                color = Color.Black, fontSize = 20.sp
-            ), fontWeight = FontWeight.Bold
-        )
 
-        // on below line we are creating
-        // a text field for our email.
         TextField(
             // on below line we are specifying
-            // value for our email text field.
-            value = name.value,
+            // value for our course name text field.
+            value = patientName.value,
 
             // on below line we are adding on
             // value change for text field.
-            onValueChange = { name.value = it },
+            onValueChange = { patientName.value = it },
 
             // on below line we are adding place holder
-            // as text as "Enter your email"
-            placeholder = { Text(text = "Enter your Name") },
-            label = { Text(text = "Enter your Name") },
+            // as text as "Enter your course name"
+            placeholder = { Text(text = "Enter your name") },
 
             // on below line we are adding modifier to it
             // and adding padding to it and filling max width
@@ -125,22 +164,19 @@ fun firebaseUI(context: Context, databaseReference: DatabaseReference) {
             singleLine = true,
         )
 
-        // on below line we are adding spacer
         Spacer(modifier = Modifier.height(10.dp))
 
-        // on below line we are creating
-        // a text field for our email.
         TextField(
             // on below line we are specifying
-            // value for our email text field.
-            value = illness.value,
+            // value for our course duration text field.
+            value = patientIllness.value,
 
             // on below line we are adding on
             // value change for text field.
-            onValueChange = { illness.value = it },
+            onValueChange = { patientIllness.value = it },
 
             // on below line we are adding place holder
-            // as text as "Enter your email"
+            // as text as "Enter your course duration"
             placeholder = { Text(text = "Enter your Illness") },
 
             // on below line we are adding modifier to it
@@ -158,23 +194,20 @@ fun firebaseUI(context: Context, databaseReference: DatabaseReference) {
             singleLine = true,
         )
 
-        // on below line we are adding spacer
         Spacer(modifier = Modifier.height(10.dp))
 
-        // on below line we are creating
-        // a text field for our email.
         TextField(
             // on below line we are specifying
-            // value for our email text field.
-            value = conditiondetails.value,
+            // value for our course description text field.
+            value = patientCondition.value,
 
             // on below line we are adding on
             // value change for text field.
-            onValueChange = { conditiondetails.value = it },
+            onValueChange = { patientCondition.value = it },
 
             // on below line we are adding place holder
-            // as text as "Enter your email"
-            placeholder = { Text(text = "Enter the condition of your illness") },
+            // as text as "Enter your course description"
+            placeholder = { Text(text = "Enter your Current Illness State") },
 
             // on below line we are adding modifier to it
             // and adding padding to it and filling max width
@@ -191,44 +224,29 @@ fun firebaseUI(context: Context, databaseReference: DatabaseReference) {
             singleLine = true,
         )
 
-        // on below line we are adding spacer
         Spacer(modifier = Modifier.height(10.dp))
-
-        // on below line creating button
+        // on below line creating button to
+        // add data to firebase firestore database.
         Button(
             onClick = {
-                // on below line we are adding data.
-
-                var empObj = PatientObj(name.value.text,illness.value.text,conditiondetails.value.text)
-
-                databaseReference.addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        // inside the method of on Data change we are setting
-                        // our object class to our database reference.
-                        // data base reference will sends data to firebase.
-                        databaseReference.setValue(empObj)
-
-                        // after adding this data we
-                        // are showing toast message.
-                        Toast.makeText(
-                            context,
-                            "Data inserted successfully",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        // if the data is not added or it is cancelled then
-                        // we are displaying a failure toast message.
-                        Toast.makeText(
-                            context,
-                            "$error",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                })
-
-
+                // on below line we are validating user input parameters.
+                if (TextUtils.isEmpty(patientName.value.toString())) {
+                    Toast.makeText(context, "Please enter your name", Toast.LENGTH_SHORT).show()
+                } else if (TextUtils.isEmpty(patientIllness.value.toString())) {
+                    Toast.makeText(context, "Please enter your Illness", Toast.LENGTH_SHORT)
+                        .show()
+                } else if (TextUtils.isEmpty(patientCondition.value.toString())) {
+                    Toast.makeText(context, "Please enter your illness state", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    // on below line adding data to
+                    // firebase fire-store database.
+                    addDataToFirebase(
+                        patientName.value,
+                        patientIllness.value,
+                        patientCondition.value, context
+                    )
+                }
             },
             // on below line we are
             // adding modifier to our button.
@@ -237,7 +255,107 @@ fun firebaseUI(context: Context, databaseReference: DatabaseReference) {
                 .padding(16.dp)
         ) {
             // on below line we are adding text for our button
-            Text(text = "Add data", modifier = Modifier.padding(8.dp))
+            Text(text = "Add Data", modifier = Modifier.padding(8.dp))
         }
+
+
+
+        //use text view as a button
+
+
+
+        Button(onClick = {navController.navigate(ROUTE_APPOINTMENTS)},
+            shape = RoundedCornerShape(5.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "VIEW",color = Color.Black, fontSize = 12.sp)
+        }
+
+
+
+
+//        Text(
+//            modifier = Modifier
+//
+//                .clickable {
+//                    val navController = null
+//                    navController.navigate(ROUTE_MEDICALHISTORY) {
+//                        popUpTo(ROUTE_APPOINTMENTS) { var inclusive = true }
+//                    }
+//                },
+//            text = stringResource(id = R.string.dont_have_account),
+//            style = MaterialTheme.typography.bodyLarge,
+//            textAlign = TextAlign.Center,
+//            color = MaterialTheme.colorScheme.onSurface
+//        )
+
+
+
+//        var spacing = null
+//        Button(
+//            onClick = {
+//                var viewModel = null
+//                viewModel?.logout()
+//                var navController = null
+//                navController.navigate(ROUTE_MEDICALHISTORY) {
+//                    popUpTo(ROUTE_APPOINTMENTS) { var inclusive = true }
+//                }
+//            },
+//            modifier = Modifier
+//                .align(Alignment.CenterHorizontally)
+//
+//        ) {
+//            Text(text = stringResource(id = R.string.medicalhistory))
+//        }
+
+        Spacer(modifier = Modifier.height(5.dp))
+        //another button
+   
+        
     }
+}
+
+private fun Nothing?.logout() {
+    TODO("Not yet implemented")
+}
+
+private fun Nothing?.navigate(routeMedicalhistory: String, function: () -> Unit) {
+
+}
+
+fun addDataToFirebase(
+
+    patientName: String,
+    patientIllness: String,
+    patientCondition: String,
+    context: Context
+) {
+
+    // on below line creating an instance of firebase firestore.
+    val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    //creating a collection reference for our Firebase Firestore database.
+    val dbCourses: CollectionReference = db.collection("Patients")
+    //adding our data to our courses object class.
+    val courses = Patient(patientName, patientIllness, patientCondition)
+
+    //below method is use to add data to Firebase Firestore.
+    dbCourses.add(courses).addOnSuccessListener {
+        // after the data addition is successful
+        // we are displaying a success toast message.
+        Toast.makeText(
+            context,
+            "Your Record has been uploaded Successfully",
+            Toast.LENGTH_SHORT
+        ).show()
+
+    }.addOnFailureListener { e ->
+        // this method is called when the data addition process is failed.
+        // displaying a toast message when data addition is failed.
+        Toast.makeText(context, "Failed to add record Please Try Again\n$e", Toast.LENGTH_SHORT).show()
+    }
+    
+    
+    
+    
+
 }

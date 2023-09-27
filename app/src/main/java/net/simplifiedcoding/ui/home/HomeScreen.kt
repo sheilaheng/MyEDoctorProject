@@ -134,7 +134,7 @@ fun HomeScreen(viewModel: AuthViewModel?, navController: NavHostController) {
 
 
             ) {
-                Text(text = "Make Appointments")
+                Text(text = "Appointments Made")
 
             }
 

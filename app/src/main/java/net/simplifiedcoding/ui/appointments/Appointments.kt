@@ -31,6 +31,7 @@ import androidx.navigation.NavController
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import net.simplifiedcoding.Patient
+import net.simplifiedcoding.navigation.ROUTE_HOME
 import net.simplifiedcoding.navigation.ROUTE_MEDICALHISTORY
 import net.simplifiedcoding.ui.auth.AuthViewModel
 
@@ -262,8 +263,24 @@ fun FirebaseUI(context: Context, navController: NavController) {
 
 
 
+        Button(onClick = {
 
-        
+            navController.navigate(ROUTE_HOME)
+        },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+
+
+        ) {
+            Text(text = "Home" )
+
+        }
+
+
+
+
+
     }
 }
 

@@ -2,22 +2,15 @@ package net.simplifiedcoding.ui.appointments
 
 
 
-import net.simplifiedcoding.ui.auth.AuthViewModel
-
-
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Surface
@@ -28,28 +21,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import net.simplifiedcoding.Patient
-import net.simplifiedcoding.R
-import net.simplifiedcoding.navigation.ROUTE_APPOINTMENTS
-import net.simplifiedcoding.navigation.ROUTE_HOME
-import net.simplifiedcoding.navigation.ROUTE_LOGIN
 import net.simplifiedcoding.navigation.ROUTE_MEDICALHISTORY
-import net.simplifiedcoding.navigation.ROUTE_SIGNUP
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.navigation.NavController
-import kotlinx.coroutines.NonDisposableHandle.parent
-
+import net.simplifiedcoding.ui.auth.AuthViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -125,6 +108,8 @@ fun firebaseUI(context: Context) {
     // on below line creating a column
     // to display our retrieved image view.
     Column(
+
+
         // adding modifier for our column
         modifier = Modifier
             .fillMaxHeight()
@@ -263,34 +248,24 @@ fun firebaseUI(context: Context) {
         //use text view as a button
 
 
-
-        Button(onClick = {navController.navigate(ROUTE_APPOINTMENTS)},
-            shape = RoundedCornerShape(5.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "VIEW",color = Color.Black, fontSize = 12.sp)
+        var medicalhistory = LocalContext.current
+        Button(onClick = {
+            val navController = null
+            navController.navigate(ROUTE_MEDICALHISTORY)
+        },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+            
+            
+            ) {
+            Text(text = "MedicalHistory" )
+            
         }
 
 
 
-
-//        Text(
-//            modifier = Modifier
 //
-//                .clickable {
-//                    val navController = null
-//                    navController.navigate(ROUTE_MEDICALHISTORY) {
-//                        popUpTo(ROUTE_APPOINTMENTS) { var inclusive = true }
-//                    }
-//                },
-//            text = stringResource(id = R.string.dont_have_account),
-//            style = MaterialTheme.typography.bodyLarge,
-//            textAlign = TextAlign.Center,
-//            color = MaterialTheme.colorScheme.onSurface
-//        )
-
-
-
 //        var spacing = null
 //        Button(
 //            onClick = {
@@ -319,7 +294,7 @@ private fun Nothing?.logout() {
     TODO("Not yet implemented")
 }
 
-private fun Nothing?.navigate(routeMedicalhistory: String, function: () -> Unit) {
+private fun Nothing?.navigate(routeMedicalhistory: String) {
 
 }
 
@@ -334,12 +309,12 @@ fun addDataToFirebase(
     // on below line creating an instance of firebase firestore.
     val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     //creating a collection reference for our Firebase Firestore database.
-    val dbCourses: CollectionReference = db.collection("Patients")
+    val dbPatients: CollectionReference = db.collection("Patients")
     //adding our data to our courses object class.
-    val courses = Patient(patientName, patientIllness, patientCondition)
+    val patients = Patient(patientName, patientIllness, patientCondition)
 
     //below method is use to add data to Firebase Firestore.
-    dbCourses.add(courses).addOnSuccessListener {
+    dbPatients.add(patients).addOnSuccessListener {
         // after the data addition is successful
         // we are displaying a success toast message.
         Toast.makeText(

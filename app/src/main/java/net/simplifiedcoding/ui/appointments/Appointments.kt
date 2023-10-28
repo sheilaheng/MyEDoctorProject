@@ -307,7 +307,7 @@ fun addDataToFirebase(
         // we are displaying a success toast message.
         Toast.makeText(
             context,
-            "Your Record has been uploaded Successfuly",
+            "Your Record has been uploaded Successfully",
             Toast.LENGTH_SHORT
         ).show()
 
